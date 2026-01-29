@@ -74,7 +74,7 @@ class Pea extends Phaser.GameObjects.Container {
      */
     destroy(fromScene) {
         // Remove from projectiles array
-        if (this.scene.projectiles) {
+        if (this.scene && this.scene.projectiles) {
             const index = this.scene.projectiles.indexOf(this);
             if (index > -1) {
                 this.scene.projectiles.splice(index, 1);
