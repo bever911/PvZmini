@@ -1,0 +1,64 @@
+PHASE 5 VERIFICATION CHECKLIST
+================================
+
+To verify Phase 5 changes are working:
+
+1. ✅ REDUCED ZOMBIE HEALTH:
+   - Open src/entities/zombies/BasicZombie.js
+   - Line 11 should say: health: 50  (was 100)
+   
+   - Open src/entities/zombies/ConeZombie.js
+   - Line 11 should say: health: 100  (was 200)
+   
+   - Open src/entities/zombies/BucketZombie.js
+   - Line 11 should say: health: 150  (was 300)
+
+2. ✅ CHERRY BOMB WORKS:
+   - Open src/entities/plants/CherryBomb.js
+   - Look for the explode() method around line 51
+   - Should have code that damages zombies (forEach loop)
+   - Should NOT say "TODO: Damage all zombies"
+
+3. ✅ METAL BUCKET:
+   - Open src/entities/zombies/BucketZombie.js
+   - Line 22 should have: this.bucket = this.scene.add.rectangle
+   - Should NOT use emoji bucket
+
+4. ✅ SLOWER ZOMBIE SPAWNING:
+   - Open src/systems/ZombieManager.js
+   - Line 23 should say: this.initialDelay = 15000  (was 10000)
+   - Line 24 should say: this.zombieSpawnDelay = 5000  (was 3000)
+
+5. ✅ FASTER SUN:
+   - Open src/systems/SunManager.js
+   - Line 14 should say: this.spawnInterval = 6000  (was 8000)
+
+6. ✅ WAVE SYSTEM:
+   - Open src/systems/ZombieManager.js
+   - Should have currentWave, maxWaves = 10
+   - Should have startWaves() method
+   - Should have onWaveComplete() method
+
+7. ✅ VICTORY SCREEN:
+   - Open src/scenes/GameScene.js
+   - Should have victory() method (around line 320)
+   - Should show trophy emoji, confetti
+
+8. ✅ WAVE DISPLAY:
+   - Open src/scenes/GameScene.js
+   - Line 132 should have: 'Wave: 0/10'
+   - Should have updateWaveDisplay() method
+
+9. ✅ RESTART BUTTONS:
+   - Open src/scenes/GameScene.js
+   - gameOver() method should have clickable restart button
+   - victory() method should have "PLAY AGAIN" button
+
+WHEN YOU RUN THE GAME:
+- Should say "v0.5" in top right (not v0.4)
+- Should show "Wave: 0/10" at top center
+- First zombie spawns after 15 seconds (not 10)
+- Zombies much easier to kill
+- Cherry Bomb kills all nearby zombies
+- Win after beating 10 waves
+- Clickable restart buttons on game over/victory
