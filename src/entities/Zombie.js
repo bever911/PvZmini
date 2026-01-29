@@ -246,6 +246,10 @@ class Zombie extends Phaser.GameObjects.Container {
     update(delta) {
         if (this.isDead) return;
         
+        // Update current column based on position (for Cherry Bomb range detection)
+        // Grid starts at x=200, cells are 120 wide
+        this.col = Math.floor((this.x - 200) / 120);
+        
         // Check if eating, verify plant still exists
         if (this.isEating) {
             if (!this.targetPlant || this.targetPlant.isDead) {

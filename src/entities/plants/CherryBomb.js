@@ -66,7 +66,21 @@ class CherryBomb extends Plant {
         // Flash effect
         this.scene.cameras.main.flash(200, 255, 100, 0);
         
-        // TODO: Damage all zombies in range when zombies are added
+        // Damage all zombies in range (3x3 grid area)
+        if (this.scene.zombies) {
+            this.scene.zombies.forEach(zombie => {
+                if (!zombie || !zombie.active) return;
+                
+                // Check if zombie is within explosion range
+                const rowDiff = Math.abs(zombie.row - this.row);
+                const colDiff = Math.abs(zombie.col - this.col);
+                
+                if (rowDiff <= this.explosionRange && colDiff <= this.explosionRange) {
+                    console.log('💥 Cherry Bomb hit', zombie.zombieType, 'in explosion!');
+                    zombie.takeDamage(this.explosionDamage);
+                }
+            });
+        }
         
         // Destroy self
         this.isDead = true;

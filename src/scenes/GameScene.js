@@ -52,13 +52,13 @@ class GameScene extends Phaser.Scene {
         
         // 6. Create zombie manager
         this.zombieManager = new ZombieManager(this);
-        this.zombieManager.startTestWave();
+        this.zombieManager.startWaves();
         
         // 7. Listen for events
         this.events.on('cellClicked', this.onCellClicked, this);
         this.events.on('sunCollected', this.onSunCollected, this);
         
-        console.log('✅ Phase 4 Complete: Zombies incoming!');
+        console.log('✅ Phase 5 Complete: Wave system activated!');
     }
 
     /**
@@ -120,7 +120,7 @@ class GameScene extends Phaser.Scene {
         });
         
         // Game title (top-center)
-        this.add.text(640, 25, 'PLANTS VS ZOMBIES', {
+        this.add.text(640, 15, 'PLANTS VS ZOMBIES', {
             fontSize: '28px',
             fill: '#ffffff',
             fontFamily: 'Arial Black, Arial',
@@ -128,8 +128,17 @@ class GameScene extends Phaser.Scene {
             strokeThickness: 4
         }).setOrigin(0.5);
         
+        // Wave counter (top-center below title)
+        this.waveText = this.add.text(640, 50, 'Wave: 0/10', {
+            fontSize: '20px',
+            fill: '#ffaa00',
+            fontFamily: 'Arial Black, Arial',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setOrigin(0.5);
+        
         // Phase indicator (top-right)
-        this.add.text(1250, 20, 'v0.4', {
+        this.add.text(1250, 20, 'v0.5', {
             fontSize: '20px',
             fill: '#00ff00',
             fontFamily: 'Arial'
@@ -236,6 +245,21 @@ class GameScene extends Phaser.Scene {
     }
 
     /**
+     * Update wave display
+     */
+    updateWaveDisplay(current, max) {
+        this.waveText.setText(`Wave: ${current}/${max}`);
+        
+        // Pulse animation
+        this.tweens.add({
+            targets: this.waveText,
+            scale: { from: 1.5, to: 1 },
+            duration: 300,
+            ease: 'Back.easeOut'
+        });
+    }
+
+    /**
      * Game over!
      */
     gameOver() {
@@ -246,27 +270,164 @@ class GameScene extends Phaser.Scene {
         
         // Stop everything
         this.physics.pause();
+        if (this.sunManager) this.sunManager.stop();
         
-        // Show game over text
-        const gameOverBg = this.add.rectangle(640, 360, 800, 300, 0x000000, 0.8);
+        // Dark overlay
+        const overlay = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.85);
         
-        const gameOverText = this.add.text(640, 320, 'GAME OVER', {
-            fontSize: '72px',
+        // Game over panel
+        const panel = this.add.rectangle(640, 360, 600, 400, 0x4a3520);
+        panel.setStrokeStyle(8, 0x8b5a3c);
+        
+        // Tombstone emoji
+        this.add.text(640, 240, '🪦', {
+            fontSize: '80px'
+        }).setOrigin(0.5);
+        
+        // Game over text
+        this.add.text(640, 340, 'GAME OVER', {
+            fontSize: '64px',
             fill: '#ff0000',
             fontFamily: 'Arial Black, Arial',
             stroke: '#000000',
             strokeThickness: 8
         }).setOrigin(0.5);
         
-        const restartText = this.add.text(640, 400, 'Refresh page to restart', {
-            fontSize: '32px',
+        // Reason
+        this.add.text(640, 410, 'The zombies ate your brains!', {
+            fontSize: '24px',
             fill: '#ffffff',
             fontFamily: 'Arial',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setOrigin(0.5);
+        
+        // Restart button
+        const restartButton = this.add.rectangle(640, 490, 200, 50, 0x2a7d2e);
+        restartButton.setStrokeStyle(3, 0x1a5d1e);
+        restartButton.setInteractive({ useHandCursor: true });
+        
+        const restartText = this.add.text(640, 490, 'RESTART', {
+            fontSize: '28px',
+            fill: '#ffffff',
+            fontFamily: 'Arial Black, Arial',
             stroke: '#000000',
             strokeThickness: 4
         }).setOrigin(0.5);
         
+        // Button hover effect
+        restartButton.on('pointerover', () => {
+            restartButton.setFillStyle(0x3a9d3e);
+        });
+        restartButton.on('pointerout', () => {
+            restartButton.setFillStyle(0x2a7d2e);
+        });
+        
+        // Restart on click
+        restartButton.on('pointerdown', () => {
+            location.reload();
+        });
+        
         // Flash red
         this.cameras.main.flash(500, 255, 0, 0);
+    }
+
+    /**
+     * Victory!
+     */
+    victory() {
+        if (this.isGameOver) return;
+        this.isGameOver = true;
+        
+        console.log('🎉 VICTORY! 🎉');
+        
+        // Stop everything
+        this.physics.pause();
+        if (this.sunManager) this.sunManager.stop();
+        
+        // Golden overlay
+        const overlay = this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.7);
+        
+        // Victory panel
+        const panel = this.add.rectangle(640, 360, 700, 450, 0x4a3520);
+        panel.setStrokeStyle(8, 0xffd700);
+        
+        // Trophy emoji
+        this.add.text(640, 220, '🏆', {
+            fontSize: '100px'
+        }).setOrigin(0.5);
+        
+        // Victory text
+        this.add.text(640, 340, 'VICTORY!', {
+            fontSize: '72px',
+            fill: '#ffd700',
+            fontFamily: 'Arial Black, Arial',
+            stroke: '#000000',
+            strokeThickness: 8
+        }).setOrigin(0.5);
+        
+        // Congratulations
+        this.add.text(640, 410, 'You survived all 10 waves!', {
+            fontSize: '28px',
+            fill: '#ffffff',
+            fontFamily: 'Arial',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setOrigin(0.5);
+        
+        this.add.text(640, 450, 'Your lawn is safe! 🌻', {
+            fontSize: '24px',
+            fill: '#00ff00',
+            fontFamily: 'Arial',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setOrigin(0.5);
+        
+        // Play again button
+        const playButton = this.add.rectangle(640, 520, 220, 50, 0x2a7d2e);
+        playButton.setStrokeStyle(3, 0xffd700);
+        playButton.setInteractive({ useHandCursor: true });
+        
+        const playText = this.add.text(640, 520, 'PLAY AGAIN', {
+            fontSize: '28px',
+            fill: '#ffffff',
+            fontFamily: 'Arial Black, Arial',
+            stroke: '#000000',
+            strokeThickness: 4
+        }).setOrigin(0.5);
+        
+        // Button hover effect
+        playButton.on('pointerover', () => {
+            playButton.setFillStyle(0x3a9d3e);
+        });
+        playButton.on('pointerout', () => {
+            playButton.setFillStyle(0x2a7d2e);
+        });
+        
+        // Restart on click
+        playButton.on('pointerdown', () => {
+            location.reload();
+        });
+        
+        // Flash gold
+        this.cameras.main.flash(500, 255, 215, 0);
+        
+        // Confetti effect
+        for (let i = 0; i < 50; i++) {
+            this.time.delayedCall(i * 50, () => {
+                const x = Phaser.Math.Between(200, 1080);
+                const y = -50;
+                const confetti = this.add.circle(x, y, 8, Phaser.Math.Between(0, 0xffffff));
+                this.tweens.add({
+                    targets: confetti,
+                    y: 750,
+                    x: x + Phaser.Math.Between(-100, 100),
+                    alpha: 0,
+                    duration: 2000,
+                    ease: 'Cubic.easeIn',
+                    onComplete: () => confetti.destroy()
+                });
+            });
+        }
     }
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Plants vs Zombies</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.85.2/dist/phaser.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Simple test config
+        const testConfig = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            backgroundColor: '#2d2d2d',
+            scene: {
+                create: function() {
+                    this.add.text(400, 300, 'PHASER IS WORKING!', {
+                        fontSize: '48px',
+                        fill: '#00ff00'
+                    }).setOrigin(0.5);
+                    
+                    console.log('✅ Phaser loaded successfully!');
+                }
+            }
+        };
+        
+        console.log('Starting Phaser...');
+        const game = new Phaser.Game(testConfig);
+    </script>
+</body>
+</html>

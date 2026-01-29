@@ -11,7 +11,7 @@ class SunManager {
     constructor(scene) {
         this.scene = scene;
         this.activeSuns = [];
-        this.spawnInterval = 8000; // 8 seconds in milliseconds
+        this.spawnInterval = 6000; // 6 seconds (was 8)
         this.spawnTimer = null;
         
         // Spawn area boundaries (within lawn grid)

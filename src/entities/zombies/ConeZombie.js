@@ -1,14 +1,14 @@
 /**
  * ConeZombie - Zombie with traffic cone armor
  * 
- * Health: 200 (2x basic)
+ * Health: 100 (reduced for better balance)
  * Speed: 20 pixels/second
  * Damage: 20 per bite
  */
 class ConeZombie extends Zombie {
     constructor(scene, x, y, row) {
         super(scene, x, y, row, {
-            health: 200,
+            health: 100,
             speed: 20,
             damage: 20,
             type: 'Cone Zombie',
