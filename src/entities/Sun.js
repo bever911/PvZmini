@@ -149,15 +149,16 @@ class Sun extends Phaser.GameObjects.Container {
             duration: 500,
             ease: 'Power2',
             onComplete: () => {
-                // Add sun value to counter
-                this.scene.events.emit('sunCollected', 25);
-                
-                // Small flash effect at counter
-                const flash = this.scene.add.circle(targetX, targetY, 20, 0xffff00, 0.8);
-                this.scene.tweens.add({
-                    targets: flash,
-                    scale: 2,
-                    alpha: 0,
+                // Add sun value to counter (with safety check)
+                if (this.scene && this.scene.events) {
+                    this.scene.events.emit('sunCollected', 25);
+                    
+                    // Small flash effect at counter
+                    const flash = this.scene.add.circle(targetX, targetY, 20, 0xffff00, 0.8);
+                    this.scene.tweens.add({
+                        targets: flash,
+                        scale: 2,
+                        alpha: 0,
                     duration: 300,
                     onComplete: () => flash.destroy()
                 });

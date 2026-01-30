@@ -59,6 +59,11 @@ class ZombieManager {
         
         this.scene.updateWaveDisplay(this.currentWave, this.maxWaves);
         
+        // Unlock new plants for this wave
+        if (this.scene.plantSelector) {
+            this.scene.plantSelector.unlockPlantsForWave(this.currentWave);
+        }
+        
         for (let i = 0; i < this.zombiesLeftInWave; i++) {
             this.scene.time.delayedCall(i * this.zombieSpawnDelay, () => {
                 if (!this.scene.isGameOver) {
@@ -121,7 +126,15 @@ class ZombieManager {
     pickWeightedZombieType() {
         let types = this.zombieTypes.slice();
         
-        if (this.currentWave >= 6) {
+        // Add Orcs starting at wave 7
+        if (this.currentWave >= 7) {
+            types = [
+                { class: BasicZombie, weight: 25 },
+                { class: ConeZombie, weight: 30 },
+                { class: BucketZombie, weight: 25 },
+                { class: OrcZombie, weight: 20 }
+            ];
+        } else if (this.currentWave >= 6) {
             types = [
                 { class: BasicZombie, weight: 30 },
                 { class: ConeZombie, weight: 40 },

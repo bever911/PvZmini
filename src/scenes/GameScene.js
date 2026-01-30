@@ -138,7 +138,7 @@ class GameScene extends Phaser.Scene {
         }).setOrigin(0.5);
         
         // Phase indicator (top-right)
-        this.add.text(1250, 20, 'v0.5', {
+        this.add.text(1250, 20, 'v0.9', {
             fontSize: '20px',
             fill: '#00ff00',
             fontFamily: 'Arial'
@@ -189,6 +189,15 @@ class GameScene extends Phaser.Scene {
         // Update plant selector (for graying out cards)
         if (this.plantSelector) {
             this.plantSelector.update();
+        }
+        
+        // Update all plants (for Chomper)
+        if (this.plants) {
+            this.plants.forEach(plant => {
+                if (plant && plant.active && plant.update) {
+                    plant.update(delta);
+                }
+            });
         }
         
         // Update all zombies
