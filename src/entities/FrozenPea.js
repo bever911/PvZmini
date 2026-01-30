@@ -8,7 +8,10 @@ class FrozenPea extends Pea {
         this.slowDuration = 5000;
         this.slowAmount = 0.5;
         
-        this.visual.setTint(0x00ffff);
+        // Tint the circle blue for frozen effect
+        if (this.circle) {
+            this.circle.setTint(0x00ffff);
+        }
     }
 
     hitZombie(zombie) {
