@@ -122,14 +122,16 @@ class PlantSelector {
         
         // Click handler
         bg.on('pointerdown', () => {
-            if (!isLocked) {
+            const locked = card.getData('isLocked');
+            if (!locked) {
                 this.selectPlant(card, plantData);
             }
         });
         
         // Hover effect
         bg.on('pointerover', () => {
-            if (!isLocked && card.getData('isAffordable')) {
+            const locked = card.getData('isLocked');
+            if (!locked && card.getData('isAffordable')) {
                 bg.setFillStyle(0x4a3520);
             }
         });
