@@ -159,9 +159,10 @@ class Sun extends Phaser.GameObjects.Container {
                         targets: flash,
                         scale: 2,
                         alpha: 0,
-                    duration: 300,
-                    onComplete: () => flash.destroy()
-                });
+                        duration: 300,
+                        onComplete: () => flash.destroy()
+                    });
+                }
                 
                 // Destroy this sun
                 this.destroy();

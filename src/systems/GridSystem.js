@@ -187,4 +187,13 @@ class GridSystem {
         }
         return null;
     }
+
+    /**
+     * Get the center position of a cell
+     */
+    getCellCenter(row, col) {
+        const x = this.offsetX + (col * this.cellWidth) + (this.cellWidth / 2);
+        const y = this.offsetY + (row * this.cellHeight) + (this.cellHeight / 2);
+        return { x, y };
+    }
 }
